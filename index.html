@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" initial-scale=1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spike</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="col-sm-12" id="headerD">
+                <h1 id="header">
+                    Spikes
+                </h1>
+            </div>
+            <center>
+
+                <div class="light-mode">
+                    <div v-bind:class="{setShake:wShake ,darkBlock:isDark}">
+                        <div>
+                            <img id="sun" @click="isDark=!isDark" class="choice" src="fabIcons/sun.png" />
+                        </div>
+
+                        {{textWhite}}
+
+                    </div>
+                </div>
+
+                <div class="dark-mode ">
+                    <div v-bind:class="{setShake:bShake,'lightBlock':isLight}">
+                        <div>
+                            <img id="moon" @click="isLight=!isLight" class="choice" src="fabIcons/moon.png" />
+                        </div>
+
+                        {{textBlack}}
+
+
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" @click="bShake=!bShake" class="btn btn-primary">ShakeBlack</button>
+                    <button type="button" @click="wShake=!wShake" class="btn btn-primary">Shake White</button>
+                    <button type="button" @click="shakeAll" class="btn btn-primary">Shake Screen</button>
+                </div>
+
+
+            </center>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                textBlack: 'This is the black block',
+                textWhite: 'This is the White Block',
+                isDark: false,
+                isLight: false,
+                bShake: false,
+                wShake: false,
+
+
+
+
+            },
+            watch: {
+                bShake(newVal, OldVal) {
+                    console.log(`old value ${OldVal}, new value ${newVal}`)
+                    if (newVal === true) {
+                        setTimeout(() => {
+
+                            console.log("bval after click", this.bShake)
+                            this.bShake = false
+                            console.log("after set", this.bShake)
+
+                        }, 2000)
+                    }
+                },
+                wShake(newVal, OldVal) {
+                    console.log(`old value ${OldVal}, new value ${newVal}`)
+                    if (newVal === true) {
+                        setTimeout(() => {
+                            console.log("Wval after click", this.wShake)
+                            this.wShake = false
+                            console.log("after set", this.wShake)
+                        }, 2000)
+                    }
+
+                }
+
+            },
+            methods: {
+                shakeAll: function () {
+                    document.body.classList.toggle("setShake")
+                    setTimeout(function () {
+                        document.body.classList.toggle("setShake")
+                    }, 2000)
+                }
+
+            }
+
+        })
+    </script>
+</body>
+
+
+</html>
