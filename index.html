@@ -5,6 +5,7 @@
     <meta charset="UTF-8" initial-scale=1>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spike</title>
+    <link rel=" shortcut icon" type="image/png" href="fabIcons/fav.png" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 
@@ -24,7 +25,8 @@
                 <div class="light-mode">
                     <div v-bind:class="{setShake:wShake ,darkBlock:isDark}">
                         <div>
-                            <img id="sun" @click="isDark=!isDark" class="choice" src="fabIcons/sun.png" />
+                            <img id="sun" @click="toggleSun" class="choice" src="fabIcons/sun.png" />
+
                         </div>
 
                         {{textWhite}}
@@ -35,7 +37,7 @@
                 <div class="dark-mode ">
                     <div v-bind:class="{setShake:bShake,'lightBlock':isLight}">
                         <div>
-                            <img id="moon" @click="isLight=!isLight" class="choice" src="fabIcons/moon.png" />
+                            <img id="moon" @click="toggleMoon" class="choice" src="fabIcons/moon.png" />
                         </div>
 
                         {{textBlack}}
@@ -63,6 +65,7 @@
         var vm = new Vue({
             el: '#app',
             data: {
+                notIsDark: true,
                 textBlack: 'This is the black block',
                 textWhite: 'This is the White Block',
                 isDark: false,
@@ -70,19 +73,17 @@
                 bShake: false,
                 wShake: false,
 
-
-
-
             },
+
             watch: {
                 bShake(newVal, OldVal) {
                     console.log(`old value ${OldVal}, new value ${newVal}`)
                     if (newVal === true) {
                         setTimeout(() => {
 
-                            console.log("bval after click", this.bShake)
+                            console.log('bval after click', this.bShake)
                             this.bShake = false
-                            console.log("after set", this.bShake)
+                            console.log('after set', this.bShake)
 
                         }, 2000)
                     }
@@ -91,9 +92,9 @@
                     console.log(`old value ${OldVal}, new value ${newVal}`)
                     if (newVal === true) {
                         setTimeout(() => {
-                            console.log("Wval after click", this.wShake)
+                            console.log('Wval after click', this.wShake)
                             this.wShake = false
-                            console.log("after set", this.wShake)
+                            console.log('after set', this.wShake)
                         }, 2000)
                     }
 
@@ -101,14 +102,40 @@
 
             },
             methods: {
+
                 shakeAll: function () {
-                    document.body.classList.toggle("setShake")
+                    document.body.classList.toggle('setShake')
                     setTimeout(function () {
-                        document.body.classList.toggle("setShake")
+                        document.body.classList.toggle('setShake')
                     }, 2000)
+                },
+                //function to explicitly set cookie
+                setCookie: function (name, value) {
+                    document.cookie = `${name}=${value};`
+                },
+                getCookie: function (name) {
+                    const cookieObj = document.cookie.split(';').map(cookie => cookie.split('=')).reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {})
+                    return cookieObj[name] || null
+
+
+                },
+                toggleMoon: function () {
+                    this.isLight = !this.isLight
+                    this.setCookie('moonIsLight', this.isLight)
+
+                },
+                toggleSun: function () {
+                    this.isDark = !this.isDark
+                    this.setCookie('sunIsDark', this.isDark)
+
                 }
 
-            }
+            },
+            mounted() {
+                this.isLight = JSON.parse(this.getCookie('moonIsLight')) || false
+                this.isDark = JSON.parse(this.getCookie('sunIsDark')) || false
+                this.getCookie()
+            },
 
         })
     </script>
